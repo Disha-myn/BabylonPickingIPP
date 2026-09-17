@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Picking IPP</string>
+    <string name="app_name_long">Babylon Picking IPP Counter</string>
+    <string name="add_home_shortcut">Add home shortcut</string>
+    <string name="shortcut_title">Add to home screen?</string>
+    <string name="shortcut_message">Pin Picking IPP on your home screen for one-tap access each shift.</string>
+    <string name="shortcut_add">Add shortcut</string>
+    <string name="shortcut_confirm">Confirm the shortcut on your home screen</string>
+    <string name="shortcut_added">Shortcut added to home screen</string>
+    <string name="shortcut_not_supported">Your launcher does not support pinned shortcuts</string>
+</resources>

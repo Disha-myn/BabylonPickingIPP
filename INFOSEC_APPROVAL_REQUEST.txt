@@ -1,0 +1,124 @@
+Subject: InfoSec approval request — Babylon Picking IPP counter (mobile / HHD pickers only)
+
+Hi InfoSec Team,
+
+I am requesting approval for an internal productivity tool for warehouse picking on Babylon Picking. Pickers perform all assigned tasks on HHD (handheld device) or mobile only — no desktop. The tool shows a live hourly IPP counter on the Picking screen.
+
+---
+
+1. BUSINESS CONTEXT
+
+- Users: Warehouse pickers on HHD / Android mobile devices only
+- Application: Babylon Picking (https://babylon.mynt.myntra.com/Picking/*)
+- Need: Real-time hourly IPP counter visible during picking
+- Current gap: Mobile Chrome blocks bookmarklets; no pre-approved app can inject this counter on Babylon Picking
+
+---
+
+2. WHAT THE TOOL DOES
+
+- Runs only on Babylon Picking URLs (allow-list hardcoded)
+- Reads visible on-screen picking content to detect SKU/pick events (client-side only)
+- Shows a small floating widget: hour, user, hourly count, average IPP
+- Stores counts locally on device (localStorage only)
+- Does NOT send data to external servers or third-party analytics
+- Does NOT modify Babylon backend, APIs, or databases
+- Does NOT capture passwords, OTPs, or payment data
+- Counter is removed when picker leaves Picking or logs out
+
+---
+
+3. REQUESTED APPROVAL (mobile / HHD only)
+
+Option A — Recommended (only viable automated option for HHD/mobile)
+
+  Internal Android app: "Picking IPP"
+  - Package ID: com.myntra.babylonpickingipp
+  - Type: WebView wrapper that opens Babylon Picking and auto-runs approved counter script
+  - Distribution: Internal MDM / sideload to warehouse HHD devices (not public Play Store)
+  - Replaces: Unsupported bookmarklet workarounds on mobile Chrome
+  - Source code available for security review
+
+Option B — Fallback if app approval is delayed
+
+  Manual IPP logging via approved Google Sheets / AppSheet
+  - No automation on Babylon screen
+  - Picker records count manually each hour
+  - Fully within pre-approved stack but less accurate
+
+We are NOT requesting desktop Chrome, bookmarklets, Tampermonkey, or Kiwi Browser — pickers do not use desktop for picking.
+
+---
+
+4. DATA HANDLING
+
+| Item                 | Detail                                           |
+|----------------------|--------------------------------------------------|
+| Data collected       | Hourly pick count, hour, user email from page UI |
+| Storage              | Device localStorage only                         |
+| External transmission| None                                             |
+| Third-party services | None                                             |
+| PII                  | User email already visible in Babylon UI         |
+
+---
+
+5. SECURITY CONTROLS
+
+- URL allow-list: babylon.mynt.myntra.com/Picking, babylon.myntrainfo.com/Picking only
+- Script bundled in APK — no download from internet at runtime
+- No shell/command execution, no access to other apps or files
+- Open to APK static analysis, code review, and internal signing if required
+
+---
+
+6. WHY PRE-APPROVED APPS DO NOT COVER THIS
+
+Pickers use mobile/HHD only. From the approved app list, Google Chrome is allowed but cannot run our counter on Android (javascript: bookmarklets blocked). No listed app (Myntra, AppSheet, Sheets, etc.) provides in-page pick detection on Babylon Picking. An internal Android app is the controlled path for HHD deployment.
+
+---
+
+7. REQUESTED ACTION
+
+Please approve Option A — internal Android app "Picking IPP" for MDM/sideload deployment on warehouse HHD devices.
+
+---
+
+8. SOURCE CODE — GITHUB REPOSITORY (for InfoSec review)
+
+Repository (internal / private — replace with your actual URL after push):
+
+  https://github.com/[YOUR_ORG_OR_USERNAME]/babylon-picking-ipp
+
+Example (Myntra GitHub Enterprise — use your team’s org if different):
+
+  https://github.com/myntra/babylon-picking-ipp
+
+Access: Private repo — grant read access to InfoSec reviewers on request.
+
+Key paths for review:
+
+  babylon-picking-ipp/
+  ├── app/src/main/java/.../MainActivity.kt     ← WebView, auto-inject, screen-on
+  ├── app/src/main/assets/picking_counter.js    ← IPP counter logic (full)
+  ├── app/src/main/AndroidManifest.xml          ← permissions (INTERNET only)
+  ├── INFOSEC_APPROVAL_REQUEST.txt              ← this document
+  └── README.md                                 ← build & deploy notes
+
+Related script source (same counter logic, also in repo or linked):
+
+  ../XYZ_PICKING_IPP_COUNTER_MOBILE.txt         ← master userscript (optional in repo root)
+
+No secrets, API keys, or credentials are stored in the repository.
+
+Available on request (in addition to GitHub):
+- Debug/release APK for static analysis
+- Live demo on HHD
+
+---
+
+Thanks,
+[Your Name]
+[Team / Warehouse Operations]
+[Employee ID]
+[Manager name]
+[GitHub username / team handle — for repo access]
